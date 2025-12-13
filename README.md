@@ -96,9 +96,97 @@ lambda-fraud-detection/
 
 ---
 
+# 🤝 Como Contribuir
+
+#### **1) Clone e prepare o ambiente**
+```bash
+git clone https://github.com/seuusuario/lambda-fraud-detection.git
+cd lambda-fraud-detection
+git checkout develop
+git pull origin develop
+```
+
+#### **2) Crie sua branch de trabalho**
+```bash
+git checkout -b seu-nome/descricao-curta
+# Exemplos:
+# git checkout -b maria/novo-modelo-fraude
+# git checkout -b joao/melhoria-dashboard
+# git checkout -b pedro/correcao-kafka
+```
+
+#### **3) Configure o ambiente**
+```bash
+cp .env.example .env
+docker-compose up -d
+```
+
+#### **4) Desenvolva e teste suas alterações**
+
+- Modifique o código conforme necessário
+- Teste com: `docker-compose restart <servico>`
+- Verifique se tudo funciona com os containers
+
+#### **5) Commit e envie suas mudanças**
+```bash
+git add .
+git commit -m "feat: descrição clara do que foi feito"
+# Exemplos:
+# git commit -m "feat: adiciona novo modelo de detecção"
+# git commit -m "fix: corrige conexão com MySQL"
+git push origin sua-branch
+```
+
+#### **6) Crie um Pull Request (PR)**
+
+1. Vá até o repositório no GitHub
+2. Clique em "Pull Requests" → "New Pull Request"
+3. Configure:
+   - base: develop ← compare: sua-branch
+4. Descreva o que foi feito e porquê
+5. Aguarde revisão
+
+
+### ✅ Checklist antes de criar PR
+
+- Testei localmente com docker-compose up
+- Meu código segue os padrões existentes
+- Adicionei/atualizei documentação se necessário
+- Não quebrei funcionalidades existentes
+- Commits com mensagens descritivas
+
+### 📌 Regras do Projeto
+
+- Sempre trabalhe a partir da branch develop
+- Crie PRs apenas para develop (não para main)
+- Aguarde aprovação antes do merge
+- Mantenha commits pequenos e descritivos
+- Use português nas mensagens de commit (projeto acadêmico BR)
+- Teste sempre com Docker antes de commitar
+
+### 📝Convenções de commits
+```bash
+# Padrão recomendado:
+git commit -m "feat: adiciona nova lambda de processamento"
+git commit -m "fix: corrige bug no docker-compose"
+git commit -m "docs: atualiza README com setup"
+git commit -m "test: adiciona testes para ETL"
+git commit -m "chore: atualiza versões do docker"
+
+# Tipos úteis para seu projeto:
+- feat: Nova funcionalidade
+- fix: Correção de bug
+- refactor: Refatoração sem mudança funcional
+- perf: Melhorias de performance
+- infra: Alterações na infraestrutura Docker
+- data: Modificações em datasets/scripts de dados
+```
+
+---
+
 # ▶️ Como Executar o Projeto
 
-#### **1) Clone o repositório**
+#### **2) Crie sua branch de trabalho**
 ```bash
 git clone https://github.com/seuusuario/lambda-fraud-detection.git
 cd lambda-fraud-detection
