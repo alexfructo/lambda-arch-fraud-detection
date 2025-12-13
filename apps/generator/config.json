@@ -1,0 +1,25 @@
+{
+  "transactions_per_second": 4,
+
+  "min_amount": 1.0,
+  "max_amount": 1200.0,
+
+  "categories": [
+    "shopping", "food", "travel", "gas", "entertainment",
+    "online_services", "subscriptions", "electronics"
+  ],
+
+  "merchants": [
+    "McDonalds", "Amazon", "Uber", "Shell", "Walmart",
+    "Target", "Starbucks", "BestBuy", "Costco", "HomeDepot",
+    "CVS Pharmacy", "Apple Store", "Delta Airlines",
+    "Airbnb", "Spotify", "Netflix", "Burger King", "Subway"
+  ],
+
+  "states": [
+    "CA", "NY", "TX", "FL", "WA", "NV", "IL", "NJ", "MA", "GA"
+  ],
+
+  "amount_distribution": "uniform",  
+  "max_city_population": 5000000
+}
