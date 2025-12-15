@@ -5,7 +5,7 @@ import logging
 import csv
 import json
 from dotenv import load_dotenv
-#from kafka import KafkaProducer
+from kafka import KafkaProducer
 
 from generator import TransactionGenerator
 
@@ -63,37 +63,36 @@ def run_kafka(gen: TransactionGenerator):
 
     bootstrap = os.getenv("KAFKA_BOOTSTRAP")
     topic = os.getenv("KAFKA_TOPIC")
-    security = os.getenv("KAFKA_SECURITY", "PLAINTEXT")
-    sasl_mech = os.getenv("KAFKA_SASL_MECH", "PLAIN")
-    username = os.getenv("KAFKA_USERNAME")
-    password = os.getenv("KAFKA_PASSWORD")
+
+    if not bootstrap or not topic:
+        raise RuntimeError("KAFKA_BOOTSTRAP e KAFKA_TOPIC devem estar definidos")
 
     logger.info(f"Enviando transações para Kafka — tópico: {topic}")
 
-    kafka_config = {
-        "bootstrap_servers": bootstrap,
-        "value_serializer": lambda v: json.dumps(v).encode("utf-8"),
-        "security_protocol": security
-    }
-
-    # Se estiver usando SASL
-    if username and password:
-        kafka_config.update({
-            "sasl_mechanism": sasl_mech,
-            "sasl_plain_username": username,
-            "sasl_plain_password": password,
-        })
-
-    producer = KafkaProducer(**kafka_config)
+    producer = KafkaProducer(
+        bootstrap_servers=bootstrap,
+        value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+        acks="all",
+        retries=3
+    )
 
     tps = gen.config["transactions_per_second"]
     delay = 1 / tps
 
-    while True:
-        trans = gen.generate_transaction()
-        producer.send(topic, value=trans)
-        logger.info(f"Transação enviada: {trans['trans_num']}")
-        time.sleep(delay)
+    try:
+        while True:
+            trans = gen.generate_transaction()
+            producer.send(topic, value=trans)
+            logger.info(f"Transação enviada: {trans['trans_num']}")
+            time.sleep(delay)
+
+    except KeyboardInterrupt:
+        logger.info("Encerrando producer Kafka...")
+
+    finally:
+        producer.flush()
+        producer.close()
+
 
 # --------------------------------------------------------------
 # MODO: PRINT (debug)
