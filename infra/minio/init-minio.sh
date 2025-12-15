@@ -1,16 +1,32 @@
 #!/bin/sh
+set -e
 
-# Espera o MinIO ficar disponível
-until mc alias set myminio http://minio:9000 minioadmin minioadmin; do
-    echo "Esperando pelo MinIO..."
+echo "======================================"
+echo " MinIO bootstrap — criando buckets"
+echo "======================================"
+
+echo "Aguardando MinIO ficar disponível..."
+
+until mc alias set local http://minio:9000 minioadmin minioadmin; do
+    echo "MinIO ainda não disponível, aguardando..."
     sleep 5
 done
 
-# Cria os buckets da arquitetura Lambda
-mc mb myminio/bronze --ignore-existing
-mc mb myminio/silver --ignore-existing
-mc mb myminio/gold --ignore-existing
-mc mb myminio/feature_store --ignore-existing
-mc mb myminio/serving --ignore-existing
+echo "MinIO disponível. Criando buckets..."
 
-echo "Buckets do MinIO criados com sucesso!"
+# --------------------------------------
+# Data Lake (Arquitetura Medalhão)
+# --------------------------------------
+mc mb local/bronze --ignore-existing
+mc mb local/silver --ignore-existing
+mc mb local/gold --ignore-existing
+
+# --------------------------------------
+# Camadas adicionais
+# --------------------------------------
+mc mb local/feature-store --ignore-existing
+mc mb local/serving --ignore-existing
+
+echo "======================================"
+echo " Buckets do MinIO criados com sucesso!"
+echo "======================================"
