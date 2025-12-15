@@ -1,6 +1,15 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,venv,visualstudiocode
 
+# Volumes Docker
+data/
+infra/airflow/logs/
+infra/airflow/plugins/__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
