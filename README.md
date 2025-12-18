@@ -100,7 +100,7 @@ lambda-fraud-detection/
 
 #### **1) Clone e prepare o ambiente**
 ```bash
-git clone https://github.com/seuusuario/lambda-fraud-detection.git
+git clone https://github.com/alexfructo/lambda-arch-fraud-detection.git
 cd lambda-fraud-detection
 git checkout develop
 git pull origin develop
@@ -221,6 +221,7 @@ Isso iniciará:
 | Streamlit Dashboard | http://localhost:8501 |
 | API FastAPI | http://localhost:8000/docs |
 | Airflow | http://localhost:8080 |
+| Kafka-ui | http://localhost:8081 |
 | MinIO Console | http://localhost:9001 |
 | MySQL | localhost:3306 |
 
