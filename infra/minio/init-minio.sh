@@ -7,9 +7,14 @@ echo "======================================"
 
 echo "Aguardando MinIO ficar disponível..."
 
-until mc alias set local http://minio:9000 minioadmin minioadmin; do
-    echo "MinIO ainda não disponível, aguardando..."
-    sleep 5
+until mc alias set local http://minio:9000 "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"; do
+    echo "MinIO ainda não disponível (alias)..."
+    sleep 3
+done
+
+until mc ls local >/dev/null 2>&1; do
+    echo "MinIO ainda não pronto para operações..."
+    sleep 3
 done
 
 echo "MinIO disponível. Criando buckets..."
