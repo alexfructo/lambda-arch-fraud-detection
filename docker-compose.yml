@@ -37,9 +37,9 @@ services:
     volumes:
       - ./infra/kafka/config:/kafka/config
 
-  kafka-init:
+  init-kafka:
     image: confluentinc/cp-kafka:7.3.0
-    container_name: kafka-init
+    container_name: init-kafka
     networks:
       - lambda-net
     depends_on:
@@ -48,6 +48,9 @@ services:
     command: -c "/scripts/init-kafka.sh"
     volumes:
       - ./infra/kafka:/scripts
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    restart: on-failure
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -79,9 +82,9 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
     command: server /data --console-address ":9001"
 
-  minio-client:
+  init-minio:
     image: minio/mc
-    container_name: minio-client
+    container_name: init-minio
     networks:
       - lambda-net
     depends_on:
@@ -90,6 +93,10 @@ services:
     command: -c "/scripts/init-minio.sh"
     volumes:
       - ./infra/minio:/scripts
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    restart: on-failure
 
   # ---------------------------------------------------------------------------
   # 3) SERVING LAYER - MySQL
