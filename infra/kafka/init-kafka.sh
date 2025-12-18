@@ -1,20 +1,23 @@
 #!/bin/bash
 set -e
 
+: "${KAFKA_BOOTSTRAP_SERVERS:=kafka:29092}"
+
 echo "======================================"
 echo " Kafka bootstrap — criando tópicos"
 echo "======================================"
 
-echo "Aguardando Kafka ficar disponível..."
-cub kafka-ready -b kafka:29092 1 60
+echo "Aguardando Kafka ficar disponível (operação real)..."
+
+until kafka-topics --bootstrap-server "$KAFKA_BOOTSTRAP_SERVERS" --list >/dev/null 2>&1; do
+  echo "Kafka ainda não pronto para operações..."
+  sleep 5
+done
 
 echo "Kafka disponível. Criando tópicos..."
 
-# -------------------------------------------------
-# Tópico: transações brutas (ingestão)
-# -------------------------------------------------
 kafka-topics \
-  --bootstrap-server kafka:29092 \
+  --bootstrap-server "$KAFKA_BOOTSTRAP_SERVERS" \
   --create \
   --topic transactions_raw \
   --partitions 3 \
@@ -23,11 +26,8 @@ kafka-topics \
 
 echo "Tópico 'transactions_raw' OK"
 
-# -------------------------------------------------
-# (Opcional) Tópico: transações analisadas
-# -------------------------------------------------
 kafka-topics \
-  --bootstrap-server kafka:29092 \
+  --bootstrap-server "$KAFKA_BOOTSTRAP_SERVERS" \
   --create \
   --topic transactions_scored \
   --partitions 3 \
