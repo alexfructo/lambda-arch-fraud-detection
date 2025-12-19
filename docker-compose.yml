@@ -38,16 +38,12 @@ services:
       - ./infra/kafka/config:/kafka/config
 
   init-kafka:
-    image: confluentinc/cp-kafka:7.3.0
+    build: ./infra/kafka
     container_name: init-kafka
     networks:
       - lambda-net
     depends_on:
       - kafka
-    entrypoint: /bin/bash
-    command: -c "/scripts/init-kafka.sh"
-    volumes:
-      - ./infra/kafka:/scripts
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     restart: on-failure
@@ -83,16 +79,12 @@ services:
     command: server /data --console-address ":9001"
 
   init-minio:
-    image: minio/mc
+    build: ./infra/minio
     container_name: init-minio
     networks:
       - lambda-net
     depends_on:
       - minio
-    entrypoint: /bin/sh
-    command: -c "/scripts/init-minio.sh"
-    volumes:
-      - ./infra/minio:/scripts
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
