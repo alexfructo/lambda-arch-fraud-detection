@@ -152,3 +152,28 @@ services:
     depends_on:
       - mysql
       - kafka
+  # ---------------------------------------------------------------------------
+  # 6) SERVING LAYER - API XGBOOST
+  # ---------------------------------------------------------------------------
+  xgboost-api:
+    build:
+      context: ./apps/api/xgboost
+    container_name: xgboost-api
+    networks:
+      - lambda-net
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - FLASK_ENV=production
+    volumes:
+      # Para desenvolvimento: montar código local
+      # - ./fraud_detection_api.py:/app/fraud_detection_api.py
+      - ./apps/api/xgboost/logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
