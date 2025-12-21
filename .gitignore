@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,venv,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,venv,visualstudiocode
 
+# Artefatos de modelo (apenas Fraud Sentinel)
+/apps/api/fraud_sentinel/models/**/*.pkl
+/apps/api/fraud_sentinel/models/**/metadata.json
+
 # Volumes Docker
 data/
 infra/airflow/logs/
