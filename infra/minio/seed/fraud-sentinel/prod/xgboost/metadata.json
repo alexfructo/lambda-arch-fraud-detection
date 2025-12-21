@@ -1,0 +1,54 @@
+{
+    "artifact_type": "model",
+    "model_name": "fraud_detection_xgboost",
+    "framework": "xgboost",
+    "algorithm": "Gradient Boosted Trees",
+    "version": "1.0.0",
+    "trained_at": "2025-12-18T14:30:00",
+    "trained_by": "capstone_project_team",
+    "dataset": {
+      "name": "kaggle_fraud_detection",
+      "source": "https://www.kaggle.com/datasets/kartik2112/fraud-detection",
+      "split": {
+        "train": 0.7,
+        "test": 0.3
+      }
+    },
+    "target": "is_fraud",
+    "features": {
+      "total_features": 75,
+      "numerical": [
+        "amt",
+        "amt_log",
+        "city_pop",
+        "idade",
+        "distancia_km",
+        "hora",
+        "dia_semana",
+        "dia_mes",
+        "mes"
+      ],
+      "categorical": [
+        "category",
+        "gender",
+        "state"
+      ]
+    },
+    "metrics": {
+      "auc_roc": 0.9943,
+      "auc_pr": 0.9081,
+      "precision": 0.9769,
+      "recall": 0.7236,
+      "f1_score": 0.8314
+    },
+    "training_config": {
+      "learning_rate": 0.1,
+      "max_depth": 6,
+      "n_estimators": 300,
+      "subsample": 0.8,
+      "colsample_bytree": 0.8,
+      "scale_pos_weight": "balanced"
+    },
+    "description": "Modelo XGBoost treinado para detecção de fraudes financeiras em transações de cartão de crédito."
+  }
+  

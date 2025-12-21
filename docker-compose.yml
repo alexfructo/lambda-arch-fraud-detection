@@ -153,27 +153,39 @@ services:
       - mysql
       - kafka
   # ---------------------------------------------------------------------------
-  # 6) SERVING LAYER - API XGBOOST
+  # 6) SERVING LAYER - API DE INFERÊRNCIA
   # ---------------------------------------------------------------------------
-  xgboost-api:
+  fraud-sentinel:
     build:
-      context: ./apps/api/xgboost
-    container_name: xgboost-api
+      context: ./apps/api/fraud_sentinel
+    container_name: fraud-sentinel
     networks:
       - lambda-net
     ports:
-      - "5000:5000"
+      - "8000:8000"
     environment:
-      - PYTHONUNBUFFERED=1
-      - FLASK_ENV=production
+      PYTHONUNBUFFERED: "1"
+      MODEL_STAGE: prod
+      # MinIO
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_BUCKET: ml-models
+      MODEL_PREFIX: fraud-sentinel/prod
+
     volumes:
-      # Para desenvolvimento: montar código local
-      # - ./fraud_detection_api.py:/app/fraud_detection_api.py
-      - ./apps/api/xgboost/logs:/app/logs
+      # Logs da aplicação
+      - ./apps/api/fraud_sentinel/logs:/app/logs
+
+    depends_on:
+      - minio
+
     restart: unless-stopped
+
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+
