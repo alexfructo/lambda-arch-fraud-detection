@@ -1,0 +1,7 @@
+metric,value,model
+AUC-ROC,0.9978474968875282,com_early_stopping
+AUC-PR,0.888068247020395,com_early_stopping
+Precision,0.28400735294117646,com_early_stopping
+Recall,0.9596273291925466,com_early_stopping
+F1-Score,0.43829787234042555,com_early_stopping
+scale_pos_weight,258.16255829447033,param

@@ -1,0 +1,53 @@
+{
+    "artifact_type": "model",
+    "model_name": "fraud_detection_random_forest",
+    "framework": "scikit-learn",
+    "algorithm": "Random Forest Classifier",
+    "version": "1.0.0",
+    "trained_at": "2025-12-19T10:15:00",
+    "trained_by": "capstone_project_team",
+    "dataset": {
+      "name": "kaggle_fraud_detection",
+      "source": "https://www.kaggle.com/datasets/kartik2112/fraud-detection",
+      "split": {
+        "train": 0.7,
+        "test": 0.3
+      }
+    },
+    "target": "is_fraud",
+    "features": {
+      "total_features": 75,
+      "numerical": [
+        "amt",
+        "amt_log",
+        "city_pop",
+        "idade",
+        "distancia_km",
+        "hora",
+        "dia_semana",
+        "dia_mes",
+        "mes"
+      ],
+      "categorical": [
+        "category",
+        "gender",
+        "state"
+      ]
+    },
+    "metrics": {
+      "auc_roc": 0.9940,
+      "auc_pr": 0.9050,
+      "precision": 0.9800,
+      "recall": 0.7200,
+      "f1_score": 0.8300
+    },
+    "training_config": {
+      "n_estimators": 300,
+      "max_depth": null,
+      "min_samples_split": 2,
+      "class_weight": "balanced",
+      "random_state": 42
+    },
+    "description": "Modelo Random Forest utilizado como segundo estimador no ensemble para detecção de fraude."
+  }
+  

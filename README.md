@@ -86,13 +86,15 @@ lambda-fraud-detection/
 
 ### **Machine Learning**
 - Scikit-learn  
-- Random Forest  
+- Random Forest
+- XGBoost
 - Feature Store simples (arquivos versionados)  
 - Model Store (metadados + `.pkl`)  
 
 ### **Serviços**
 - FastAPI  
-- Streamlit  
+- Streamlit
+- XGBoost API
 
 ---
 
@@ -210,7 +212,8 @@ Isso iniciará:
 - Airflow  
 - API FastAPI  
 - Streamlit Dashboard  
-- Gerador de transações  
+- Gerador de transações
+- XGBoost API
 
 ---
 
@@ -223,6 +226,7 @@ Isso iniciará:
 | Airflow | http://localhost:8080 |
 | Kafka-ui | http://localhost:8081 |
 | MinIO Console | http://localhost:9001 |
+| XGBoost API Health Check| http://localhost:5000/health |
 | MySQL | localhost:3306 |
 
 ---

@@ -152,3 +152,40 @@ services:
     depends_on:
       - mysql
       - kafka
+  # ---------------------------------------------------------------------------
+  # 6) SERVING LAYER - API DE INFERÊRNCIA
+  # ---------------------------------------------------------------------------
+  fraud-sentinel:
+    build:
+      context: ./apps/api/fraud_sentinel
+    container_name: fraud-sentinel
+    networks:
+      - lambda-net
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHONUNBUFFERED: "1"
+      MODEL_STAGE: prod
+      # MinIO
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_BUCKET: ml-models
+      MODEL_PREFIX: fraud-sentinel/prod
+
+    volumes:
+      # Logs da aplicação
+      - ./apps/api/fraud_sentinel/logs:/app/logs
+
+    depends_on:
+      - minio
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
