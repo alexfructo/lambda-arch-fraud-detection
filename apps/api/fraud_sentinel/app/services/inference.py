@@ -45,13 +45,13 @@ def decidir_risco(probabilidade: float):
     Regra de decisão baseada na probabilidade de fraude.
     """
     if probabilidade >= 0.8:
-        return "CRÍTICO", "BLOQUEAR TRANSAÇÃO"
+        return "CRITICO", "BLOQUEAR TRANSACAO"
     elif probabilidade >= 0.6:
         return "ALTO", "SOLICITAR MFA"
     elif probabilidade >= 0.4:
-        return "MÉDIO", "MONITORAR"
+        return "MEDIO", "MONITORAR"
     else:
-        return "BAIXO", "APROVAR TRANSAÇÃO"
+        return "BAIXO", "APROVAR TRANSACAO"
 
 
 def predict_transaction(transaction_data: dict) -> dict:

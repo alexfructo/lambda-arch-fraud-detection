@@ -5,6 +5,9 @@
 /apps/api/fraud_sentinel/models/**/*.pkl
 /apps/api/fraud_sentinel/models/**/metadata.json
 
+# VS Code
+.vscode
+
 # Volumes Docker
 data/
 infra/airflow/logs/
