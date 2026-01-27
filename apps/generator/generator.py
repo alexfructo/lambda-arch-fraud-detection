@@ -1,9 +1,9 @@
 import uuid
-import time
 import random
 import json
 from faker import Faker
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 fake = Faker()
 
@@ -25,70 +25,76 @@ class TransactionGenerator:
         with open(config_path, "r") as f:
             self.config = json.load(f)
 
-    def generate_transaction(self):
+    def random_datetime_weighted(self, start: datetime, end: datetime, decay: float = 3.0) -> datetime:
         """
-        Gera uma transação única contendo dados como localização, merchant,
-        categoria, valor e informações do portador do cartão.
+        Gera um datetime aleatório entre start e end,
+        com maior concentração próximo de 'end'.
 
-        Returns:
-            dict: Dicionário contendo todos os campos da transação.
+        decay:
+            - quanto maior, mais transações recentes
+            - 2.0  = leve
+            - 3.0  = realista (recomendado)
+            - 4.0+ = bem concentrado no presente
         """
+    
+        total_seconds = int((end - start).total_seconds())
 
-        now = datetime.now()
+        r = random.random()
+        weighted = 1 - (r ** decay)
+
+        random_seconds = int(weighted * total_seconds)
+        return start + timedelta(seconds=random_seconds)
+
+    def generate_transaction(self, months_back=6):
+        """
+        Gera uma transação de cartão de crédito com base nas configurações carregadas.
+        Args:
+            months_back (int): Quantidade de meses para gerar transações do passado até o presente.
+        """
+        
+        end = datetime.now()
+        start = end - relativedelta(months=months_back)
+
+        trans_date = self.random_datetime_weighted(start, end)
 
         # merchant coordinates simulados próximos ao cliente
         base_merch_lat = float(fake.latitude())
         base_merch_long = float(fake.longitude())
 
         trans = {
-            # data/hora da transação
-            "trans_date_trans_time": now.strftime("%Y-%m-%d %H:%M:%S"),
+            "trans_date_trans_time": trans_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "unix_time": int(trans_date.timestamp()),
 
-            # dados do cartão
             "cc_num": fake.credit_card_number(),
-
-            # merchant e categoria (carregados do config.json)
             "merchant": random.choice(self.config["merchants"]),
             "category": random.choice(self.config["categories"]),
 
-            # valor da transação
             "amt": round(
                 random.uniform(
                     self.config["min_amount"],
                     self.config["max_amount"]
-                ),
-                2
+                ), 2
             ),
 
-            # dados pessoais básicos
             "first": fake.first_name(),
             "last": fake.last_name(),
             "gender": random.choice(["M", "F"]),
 
-            # endereço
             "street": fake.street_address(),
             "city": fake.city(),
             "state": random.choice(self.config["states"]),
             "zip": fake.zipcode(),
 
-            # geolocalização do cliente
             "lat": float(fake.latitude()),
             "long": float(fake.longitude()),
 
-            # população da cidade (parametrizável)
             "city_pop": random.randint(200, self.config.get("max_city_population", 5000000)),
 
-            # ocupação e data de nascimento
             "job": fake.job(),
             "dob": fake.date_of_birth(minimum_age=18, maximum_age=85).strftime("%Y-%m-%d"),
 
-            # id único da transação
             "trans_num": uuid.uuid4().hex,
 
-            # timestamp bruto
-            "unix_time": int(time.time()),
-
-            # localização aleatória do estabelecimento
             "merch_lat": base_merch_lat,
             "merch_long": base_merch_long
         }
